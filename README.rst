@@ -18,7 +18,7 @@ Usage
     table = dynamo.table(TABLE_NAME, (ACCESS_KEY, SECRET_ACCESS_KEY))
 
 
-Writing is simple:
+Writing is simple::
 
     item = table['new-key']
     item['key'] = 'value'
