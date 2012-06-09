@@ -31,8 +31,6 @@ So is reading::
 Installation
 ------------
 
-(not yet)
-
 Installing dynamo is simple with pip:
 
 ::
