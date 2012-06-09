@@ -20,7 +20,7 @@ Usage
 
 Writing is simple::
 
-    item = table['new-key'] = ['key']
+    table['new-key']['key'] = ['value']
 
 So is reading::
 
