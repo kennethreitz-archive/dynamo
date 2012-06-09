@@ -15,11 +15,19 @@ Usage
     SECRET_ACCESS_KEY = 'XXXXXX/XXXXXXXXX+XXXXXXX'
     TABLE_NAME = 'XXXXX'
 
-    db = dynamo.table(TABLE_NAME, (ACCESS_KEY, SECRET_ACCESS_KEY))
+    table = dynamo.table(TABLE_NAME, (ACCESS_KEY, SECRET_ACCESS_KEY))
 
-    item = db['key']
+
+Writing is simple:
+
+    item = table['new-key']
     item['key'] = 'value'
     item.save()
+
+Reading is simpler::
+
+    >>> table['existing-key']['attribute']
+    'value'
 
 
 Installation
