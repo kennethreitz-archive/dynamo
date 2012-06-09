@@ -7,14 +7,16 @@ This module allows you to interact with DynamoDB much like a native Python dicti
 Usage
 -----
 
-import dynamo
+::
 
-ACCESS_KEY = 'XXXXXX'
-SECRET_ACCESS_KEY = 'XXXXXX/XXXXXXXXX+XXXXXXX'
-TABLE_NAME = 'XXXXX'
+    import dynamo
 
-db = dynamo.table(TABLE_NAME, (ACCESS_KEY, SECRET_ACCESS_KEY))
+    ACCESS_KEY = 'XXXXXX'
+    SECRET_ACCESS_KEY = 'XXXXXX/XXXXXXXXX+XXXXXXX'
+    TABLE_NAME = 'XXXXX'
 
-item = db['key']
-item['key'] = 'value'
-item.save()
+    db = dynamo.table(TABLE_NAME, (ACCESS_KEY, SECRET_ACCESS_KEY))
+
+    item = db['key']
+    item['key'] = 'value'
+    item.save()
