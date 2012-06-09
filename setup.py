@@ -24,7 +24,7 @@ requires = ['boto>=2.2.0']
 setup(
     name='dynamo',
     version='0.1.0',
-    description='Python HTTP for Humans.',
+    description='Simple DynamoDB Interface.',
     long_description=open('README.rst').read() + '\n\n' +
                      open('HISTORY.rst').read(),
     author='Kenneth Reitz',
