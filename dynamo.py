@@ -5,8 +5,8 @@ from boto.dynamodb.exceptions import DynamoDBKeyNotFoundError
 
 
 class Table(object):
-    def __init__(self, conn=None, eager=False):
-        self.conn = conn
+    def __init__(self, table=None, eager=False):
+        self.table = table
         self.is_eager = eager
 
     def __repr__(self):
@@ -14,14 +14,23 @@ class Table(object):
 
     @property
     def name(self):
-        return self.conn.__dict__['_dict']['TableName']
+        return self.table.__dict__['_dict']['TableName']
 
     def item(self, item):
         return Item(item, self)
 
+    def delete(self):
+        return self.table.delete()
+
+    def scale(self, read=None, write=None):
+        read = read or self.table.read_units
+        write = write or self.table.read_units
+
+        return self.table.update_throughput(read_units=read, write_units=write)
+
     def __getitem__(self, key):
         try:
-            i = self.conn.get_item(key)
+            i = self.table.get_item(key)
             i = self.item(i)
         except DynamoDBKeyNotFoundError:
             return self.__magic_get(key)
@@ -36,7 +45,7 @@ class Table(object):
             return default
 
     def __setitem__(self, key, values):
-        i = self.conn.new_item(key, attrs=values)
+        i = self.table.new_item(key, attrs=values)
         i = self.item(i)
         i.put()
         return i
@@ -51,6 +60,17 @@ class Table(object):
 
     def __contains__(self, key):
         return not self.get(key) is None
+
+    def new(self, name):
+
+        table = self.table.layer2.create_table(
+            name=name,
+            schema=self.table._schema,
+            read_units=self.table.read_units,
+            write_units=self.table.write_units
+        )
+
+        return Table(table=table, eager=self.is_eager)
 
 
 class Item(object):
@@ -91,12 +111,17 @@ class Item(object):
         return key in self.item
 
 
-
 def table(name, auth, eager=True):
+    """Returns a given table for the given user."""
 
     dynamodb = boto.connect_dynamodb(*auth)
-    conn = dynamodb.get_table(name)
+    table = dynamodb.get_table(name)
 
-    t = Table(conn=conn, eager=eager)
+    return Table(table=table, eager=eager)
 
-    return t
+
+def tables(auth, eager=True):
+    """Returns a list of tables for the given user."""
+
+    dynamodb = boto.connect_dynamodb(*auth)
+    return [table(t, auth, eager=eager) for t in dynamodb.list_tables()]
