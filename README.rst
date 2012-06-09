@@ -20,3 +20,15 @@ Usage
     item = db['key']
     item['key'] = 'value'
     item.save()
+
+
+Installation
+------------
+
+(not yet)
+
+Installing dynamo is simple with pip:
+
+::
+
+    $ pip install dynamo
