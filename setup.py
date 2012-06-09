@@ -23,7 +23,7 @@ requires = ['boto>=2.2.0']
 
 setup(
     name='dynamo',
-    version='0.0.1',
+    version='0.1.0',
     description='Python HTTP for Humans.',
     long_description=open('README.rst').read() + '\n\n' +
                      open('HISTORY.rst').read(),
@@ -36,7 +36,7 @@ setup(
     install_requires=requires,
     license=open('LICENSE').read(),
     classifiers=(
-        'Development Status :: 5 - Production/Stable',
+        # 'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Natural Language :: English',
         'License :: OSI Approved :: ISC License (ISCL)',
