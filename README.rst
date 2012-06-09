@@ -20,11 +20,9 @@ Usage
 
 Writing is simple::
 
-    item = table['new-key']
-    item['key'] = 'value'
-    item.save()
+    item = table['new-key'] = ['key']
 
-Reading is simpler::
+So is reading::
 
     >>> table['existing-key']['attribute']
     'value'
