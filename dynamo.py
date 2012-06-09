@@ -5,7 +5,7 @@ from boto.dynamodb.exceptions import DynamoDBKeyNotFoundError
 
 
 class Table(object):
-    def __init__(self, conn=None, eager=True):
+    def __init__(self, conn=None, eager=False):
         self.conn = conn
         self.is_eager = eager
 
