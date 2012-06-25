@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import boto
+from numbers import Number
 from boto.dynamodb.exceptions import DynamoDBKeyNotFoundError
 
 
@@ -25,17 +26,16 @@ class Table(object):
     def scale(self, read=None, write=None):
         read = read or self.table.read_units
         write = write or self.table.read_units
-
         return self.table.update_throughput(read_units=read, write_units=write)
 
     def __getitem__(self, key):
         try:
-            i = self.table.get_item(key)
+            if isinstance(key, (basestring, Number)):
+                key = [key]
+            i = self.table.get_item(*key)
             i = self.item(i)
         except DynamoDBKeyNotFoundError:
             return self.__magic_get(key)
-            # i = self.item(i)
-
         return i
 
     def get(self, key, default=None):
@@ -45,7 +45,9 @@ class Table(object):
             return default
 
     def __setitem__(self, key, values):
-        i = self.table.new_item(key, attrs=values)
+        if isinstance(key, (basestring, Number)):
+            key = [key]
+        i = self.table.new_item(*key, attrs=values)
         i = self.item(i)
         i.put()
         return i
@@ -62,14 +64,12 @@ class Table(object):
         return not self.get(key) is None
 
     def new(self, name):
-
         table = self.table.layer2.create_table(
             name=name,
             schema=self.table._schema,
             read_units=self.table.read_units,
             write_units=self.table.write_units
         )
-
         return Table(table=table, eager=self.is_eager)
 
 
@@ -103,7 +103,6 @@ class Item(object):
 
     def __setitem__(self, key, value):
         self.item[key] = value
-
         if self.is_eager:
             self.item.save()
 
@@ -113,15 +112,12 @@ class Item(object):
 
 def table(name, auth, eager=True):
     """Returns a given table for the given user."""
-
     dynamodb = boto.connect_dynamodb(*auth)
     table = dynamodb.get_table(name)
-
     return Table(table=table, eager=eager)
 
 
 def tables(auth, eager=True):
     """Returns a list of tables for the given user."""
-
     dynamodb = boto.connect_dynamodb(*auth)
     return [table(t, auth, eager=eager) for t in dynamodb.list_tables()]
