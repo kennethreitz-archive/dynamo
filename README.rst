@@ -17,6 +17,9 @@ Usage
 
     table = dynamo.table(TABLE_NAME, (ACCESS_KEY, SECRET_ACCESS_KEY))
 
+    # Or, if you have AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY defined as
+    # environment variables, you can do:
+    table = dynamo.table(TABLE_NAME)
 
 Writing is simple::
 
