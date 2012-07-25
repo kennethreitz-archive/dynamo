@@ -110,14 +110,22 @@ class Item(object):
         return key in self.item
 
 
-def table(name, auth, eager=True):
+def table(name, auth=None, eager=True):
     """Returns a given table for the given user."""
-    dynamodb = boto.connect_dynamodb(*auth)
+    if auth:
+        dynamodb = boto.connect_dynamodb(*auth)
+    else:
+        dynamodb = boto.connect_dynamodb()
+
     table = dynamodb.get_table(name)
     return Table(table=table, eager=eager)
 
 
-def tables(auth, eager=True):
+def tables(auth=None, eager=True):
     """Returns a list of tables for the given user."""
-    dynamodb = boto.connect_dynamodb(*auth)
+    if auth:
+        dynamodb = boto.connect_dynamodb(*auth)
+    else:
+        dynamodb = boto.connect_dynamodb()
+
     return [table(t, auth, eager=eager) for t in dynamodb.list_tables()]
