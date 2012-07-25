@@ -112,10 +112,8 @@ class Item(object):
 
 def table(name, auth=None, eager=True):
     """Returns a given table for the given user."""
-    if auth:
-        dynamodb = boto.connect_dynamodb(*auth)
-    else:
-        dynamodb = boto.connect_dynamodb()
+    auth = auth or []
+    dynamodb = boto.connect_dynamodb(*auth)
 
     table = dynamodb.get_table(name)
     return Table(table=table, eager=eager)
@@ -123,9 +121,7 @@ def table(name, auth=None, eager=True):
 
 def tables(auth=None, eager=True):
     """Returns a list of tables for the given user."""
-    if auth:
-        dynamodb = boto.connect_dynamodb(*auth)
-    else:
-        dynamodb = boto.connect_dynamodb()
+    auth = auth or []
+    dynamodb = boto.connect_dynamodb(*auth)
 
     return [table(t, auth, eager=eager) for t in dynamodb.list_tables()]
