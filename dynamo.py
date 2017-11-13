@@ -30,7 +30,7 @@ class Table(object):
 
     def __getitem__(self, key):
         try:
-            if isinstance(key, (basestring, Number)):
+            if isinstance(key, (str, Number)):
                 key = [key]
             i = self.table.get_item(*key)
             i = self.item(i)
@@ -45,7 +45,7 @@ class Table(object):
             return default
 
     def __setitem__(self, key, values):
-        if isinstance(key, (basestring, Number)):
+        if isinstance(key, (str, Number)):
             key = [key]
         i = self.table.new_item(*key, attrs=values)
         i = self.item(i)
